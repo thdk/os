@@ -76,7 +76,7 @@ function parseArgs(): CLIArgs {
       case '--help':
       case '-h':
         printUsage();
-        exit(0);
+        break;
       default:
         // Treat as branch if no branch specified yet
         if (!parsed.branch) {

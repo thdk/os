@@ -54,9 +54,10 @@ function parseArgs(): CLIArgs {
         i++;
         break;
       case '--help':
-      case '-h':
+      case '-h': {
         printUsage();
-        exit(0);
+        break;
+      }
       default:
         // Treat as file path if no file specified yet
         if (!parsed.reviewResultsFile) {
