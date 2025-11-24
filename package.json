@@ -48,7 +48,7 @@
     }
   },
   "dependencies": {
-    "@gitbeaker/rest": "^43.8.0"
+    "@gitbeaker/rest": "43.8.0"
   },
   "devDependencies": {
     "@eslint/js": "9.8.0",
