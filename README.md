@@ -1,2 +1,0 @@
-# @thdk open-source
-
