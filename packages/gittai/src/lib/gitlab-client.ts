@@ -13,6 +13,8 @@ export interface GitlabClientConfig {
 
 export function createGitlabClient(config: GitlabClientConfig): Gitlab {
   const { host, token, jobToken, oauthToken } = config;
+
+  // adda a comment
   
   // Determine host
   const gitlabHost = host || process.env.CI_SERVER_URL || 'https://gitlab.com';
