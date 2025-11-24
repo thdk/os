@@ -15,6 +15,7 @@ interface CLIArgs {
   model?: string;
   repoPath?: string;
   baseURL?: string;
+  skipPatterns?: string[];
 }
 
 function parseArgs(): CLIArgs {
@@ -68,6 +69,10 @@ function parseArgs(): CLIArgs {
         parsed.baseURL = nextArg;
         i++;
         break;
+      case '--skip-patterns':
+        parsed.skipPatterns = nextArg.split(',').map(p => p.trim());
+        i++;
+        break;
       case '--help':
       case '-h':
         printUsage();
@@ -97,8 +102,10 @@ Options:
   -f, --files <paths>         Comma-separated list of files to review (default: all changed files)
   --focus <areas>             Comma-separated focus areas (e.g., security,performance)
   --repo-path <path>          Path to git repository (default: current directory)
+  --skip-patterns <patterns>  Comma-separated patterns to skip (e.g., '*.lock,dist/*')
   --api-key <key>             Anthropic API key (default: ANTHROPIC_API_KEY env)
   --model <name>              Model to use (default: claude-3-5-sonnet-20241022)
+  --base-url <url>            Custom API base URL (for proxies)
   -h, --help                  Show this help message
 
 Environment Variables:
@@ -188,6 +195,7 @@ Model:         ${args.model || 'claude-3-5-sonnet-20241022'}
         anthropicApiKey: args.apiKey,
         model: args.model,
         baseURL: args.baseURL,
+        skipPatterns: args.skipPatterns,
       }
     );
     
