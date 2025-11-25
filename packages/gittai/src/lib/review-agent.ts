@@ -1,9 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { exec } from 'child_process';
 import { promisify } from 'util';
-import { ReviewResultSchema, type ReviewResult, type Severity } from './schemas/review-result.schema.js';
-import { betaZodOutputFormat } from '@anthropic-ai/sdk/helpers/beta/zod.js';
-import assert from 'assert';
+import type { ReviewResult, Severity } from './schemas/review-result.schema.js';
 
 const execAsync = promisify(exec);
 
@@ -232,6 +230,49 @@ export async function reviewCode(
 }
 
 /**
+ * Parse the agent's response to extract review comments
+ */
+function parseReviewResponse(response: string): Array<{
+  position: { filePath: string; startLine: number; endLine?: number };
+  message: string;
+  severity: Severity;
+  suggestion?: { code: string; description?: string };
+}> {
+  const comments: Array<{
+    position: { filePath: string; startLine: number; endLine?: number };
+    message: string;
+    severity: Severity;
+    suggestion?: { code: string; description?: string };
+  }> = [];
+
+  // Try to extract JSON from the response
+  try {
+    // Look for JSON array in the response
+    const jsonMatch = response.match(/\[[\s\S]*\]/);
+    if (jsonMatch) {
+      const parsed = JSON.parse(jsonMatch[0]);
+      if (Array.isArray(parsed)) {
+        return parsed;
+      }
+    }
+
+    // Try parsing the whole response as JSON
+    const parsed = JSON.parse(response);
+    if (Array.isArray(parsed)) {
+      return parsed;
+    }
+    if (parsed.comments && Array.isArray(parsed.comments)) {
+      return parsed.comments;
+    }
+  } catch {
+    // Not valid JSON, return empty array
+    console.warn('Could not parse review response as JSON');
+  }
+
+  return comments;
+}
+
+/**
  * Check if a file path matches any of the skip patterns
  */
 function matchesPattern(filePath: string, patterns: string[]): boolean {
@@ -379,6 +420,23 @@ async function reviewChunk(
 ${diffChunk}
 \`\`\`
 
+Provide your review as a JSON array with this exact structure (return ONLY the JSON, no markdown code blocks):
+[
+  {
+    "position": {
+      "filePath": "path/to/file.ts",
+      "startLine": 42,
+      "endLine": 45
+    },
+    "message": "Your review comment",
+    "severity": "error",
+    "suggestion": {
+      "code": "suggested code",
+      "description": "why this is better"
+    }
+  }
+]
+
 Review criteria:
 - error: Critical bugs, logic errors, type errors, security vulnerabilities
 - warning: Potential bugs, deprecated APIs, code smells
@@ -388,13 +446,11 @@ Review criteria:
 Use line numbers from the diff context. Be specific and actionable. Focus on the most important issues.`;
 
   // Call Anthropic API
-  const client = new Anthropic({ apiKey, baseURL });
+  const anthropic = new Anthropic({ apiKey, baseURL });
 
-  const response = await client.beta.messages.parse({
+  const response = await anthropic.messages.create({
     model,
     max_tokens: 4096,
-    betas: ["structured-outputs-2025-11-13"],
-    output_format: betaZodOutputFormat(ReviewResultSchema),
     messages: [
       {
         role: 'user',
@@ -403,12 +459,13 @@ Use line numbers from the diff context. Be specific and actionable. Focus on the
     ],
   });
 
-  const content = response.parsed_output;
+  const content = response.content[0];
+  if (content.type !== 'text') {
+    throw new Error('Unexpected response type from API');
+  }
 
   // Parse the response
-  const comments = content?.comments
-
-  assert(comments, 'No comments found in review response');
+  const comments = parseReviewResponse(content.text);
   
   return {
     comments,
