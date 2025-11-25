@@ -1,3 +1,20 @@
+## 0.2.0-pr-71d225e.0 (2025-11-25)
+
+### New Features
+
+- allow override with GITLAB_TOKEN ([71d225e](https://github.com/thdk/os/commit/71d225e))
+- allow to override job token with PAT ([5e707c1](https://github.com/thdk/os/commit/5e707c1))
+- upgrade zod ([6ea87b6](https://github.com/thdk/os/commit/6ea87b6))
+- use structure output ([c04b3d0](https://github.com/thdk/os/commit/c04b3d0))
+
+### Bug Fixes
+
+- syncpack ([1ad020c](https://github.com/thdk/os/commit/1ad020c))
+
+### ❤️ Thank You
+
+- Thomas Dekiere @thdk
+
 ## 0.2.0-pr-5e707c1.0 (2025-11-25)
 
 ### New Features
