@@ -1,6 +1,6 @@
 {
   "name": "@thdk/gittai",
-  "version": "0.2.0-pr-c04b3d0.0",
+  "version": "0.2.0-pr-1ad020c.0",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
