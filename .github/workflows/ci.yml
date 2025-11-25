@@ -65,9 +65,6 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Authenticate GCP
-        uses: './.github/actions/authenticate-gcp'
 
       - name: Publish
         run: |
