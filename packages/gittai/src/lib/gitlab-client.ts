@@ -49,21 +49,8 @@ export function createGitlabClient(config: GitlabClientConfig): Gitlab {
 }
 
 export function createGitlabClientFromEnv(): Gitlab {
-  // Try CI Job Token first (most common in CI/CD)
-  if (process.env.CI_JOB_TOKEN) {
-    return createGitlabClient({
-      jobToken: process.env.CI_JOB_TOKEN,
-    });
-  }
-  
-  // Fallback to PAT
-  if (process.env.GITLAB_TOKEN) {
     return createGitlabClient({
       token: process.env.GITLAB_TOKEN,
+      jobToken: process.env.CI_JOB_TOKEN,
     });
-  }
-  
-  throw new Error(
-    'No GitLab authentication found in environment. Set CI_JOB_TOKEN or GITLAB_TOKEN'
-  );
 }
