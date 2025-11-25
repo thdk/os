@@ -1,3 +1,18 @@
+## 0.2.0-pr-79002fe.0 (2025-11-25)
+
+### New Features
+
+- upgrade zod ([6ea87b6](https://github.com/thdk/os/commit/6ea87b6))
+- use structure output ([c04b3d0](https://github.com/thdk/os/commit/c04b3d0))
+
+### Bug Fixes
+
+- syncpack ([1ad020c](https://github.com/thdk/os/commit/1ad020c))
+
+### ❤️ Thank You
+
+- Thomas Dekiere @thdk
+
 ## 0.2.0-pr-1ad020c.0 (2025-11-25)
 
 ### New Features
