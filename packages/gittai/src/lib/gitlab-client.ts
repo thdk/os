@@ -18,7 +18,16 @@ export function createGitlabClient(config: GitlabClientConfig): Gitlab {
   const gitlabHost = host || process.env.CI_SERVER_URL || 'https://gitlab.com';
   
   // Determine authentication method
+  if (token) {
+    console.log('🔑 Using Personal Access Token for authentication');
+    return new Gitlab({
+      host: gitlabHost,
+      token,
+    });
+  }
+  
   if (jobToken) {
+    console.log('🔑 Using CI Job Token for authentication');
     return new Gitlab({
       host: gitlabHost,
       jobToken,
@@ -26,18 +35,13 @@ export function createGitlabClient(config: GitlabClientConfig): Gitlab {
   }
   
   if (oauthToken) {
+    console.log('🔑 Using OAuth token for authentication');
     return new Gitlab({
       host: gitlabHost,
       oauthToken,
     });
   }
   
-  if (token) {
-    return new Gitlab({
-      host: gitlabHost,
-      token,
-    });
-  }
   
   throw new Error(
     'No authentication method provided. Please provide one of: token, jobToken, or oauthToken'
