@@ -1,3 +1,13 @@
+## 0.2.0-pr-c04b3d0.0 (2025-11-25)
+
+### New Features
+
+- use structure output ([c04b3d0](https://github.com/thdk/os/commit/c04b3d0))
+
+### ❤️ Thank You
+
+- Thomas Dekiere @thdk
+
 ## 0.1.0 (2025-11-25)
 
 ### New Features
