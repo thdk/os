@@ -115,29 +115,29 @@ Environment Variables:
 
 Examples:
   # Review a feature branch
-  gittai review feature-branch
+  gittai-review feature-branch
 
   # Review with specific base branch
-  gittai review --branch feature-123 --base develop
+  gittai-review --branch feature-123 --base develop
 
   # Review specific files only
-  gittai review feature-branch --files src/auth.ts,src/user.ts
+  gittai-review feature-branch --files src/auth.ts,src/user.ts
 
   # Focus on security and performance
-  gittai review feature-branch --focus security,performance
+  gittai-review feature-branch --focus security,performance
 
   # Custom output file
-  gittai review feature-branch --output my-review.json
+  gittai-review feature-branch --output my-review.json
 
   # In GitLab CI
-  gittai review $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
+  gittai-review $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
 
 Complete Workflow:
   # 1. Review the code
-  gittai review feature-branch --output review-results.json
+  gittai-review feature-branch --output review-results.json
   
   # 2. Post comments to GitLab MR
-  gittai post review-results.json
+  gittai review-results.json
 `);
 }
 
@@ -219,7 +219,7 @@ Severity breakdown:
     
     if (result.comments.length > 0) {
       console.log('Next step: Post comments to GitLab MR');
-      console.log(`  gittai post ${outputPath}\n`);
+      console.log(`  gittai ${outputPath}\n`);
     }
     
     exit(0);
